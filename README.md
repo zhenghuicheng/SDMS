@@ -1,1 +1,2 @@
-Student Dormitory Managerment System 
+Student Dormitory Managerment System
+学生管理系统
