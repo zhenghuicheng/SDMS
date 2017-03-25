@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--suppress ALL -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/aop
+		http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/security
+		http://www.springframework.org/schema/security/spring-security.xsd
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/data/jpa
+		http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+		http://www.springframework.org/schema/tx
+		http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/mvc
+		http://www.springframework.org/schema/mvc/spring-mvc.xsd
+http://www.springframework.org/schema/data/jpa ">
+
+       <!-- 配置Shiro的过滤器工厂类，id的值要和我们在web.xml中配置的过滤器一致-->
+       <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+              <!-- 调用我们配置的权限管理器 -->
+              <property name="securityManager" ref="securityManager"/>
+              <!-- 配置我们的登录请求地址 -->
+              <property name="loginUrl" value="/login/index"/>
+              <!-- 配置我们在登录页登录成功后的跳转地址。如果你访问的是非/login地址，则调到你访问的地址 -->
+              <property name="successUrl" value="/admin/admin"/>
+              <!-- 权限配置 -->
+              <property name="filterChainDefinitions">
+                     <value>
+                            <!-- anon 表示此地址不需要任何权限即可访问 -->
+                            /static/**=anon
+
+                            <!-- 除去配置的静态资源请求或请求地址为anon的请求，所有请求都要通过登录验证，如果不通过，则跳转到登录页面 -->
+                            <!--/editor/**=authc-->
+                            /admin/test=anyofroles[sysadmin,admin]
+                            /admin/log=anyofroles[sysadmin,admin]
+                            /admin/admin=roles[sysadmin]
+                            /admin/add=roles[sysadmin]
+                            /admin/search=roles[sysadmin]
+                            /admin/delete=roles[sysadmin]
+                            /admin/reset=anyofroles[sysadmin,admin]
+                            /admin/updatePassword=roles[sysadmin,admin]
+                            /admin/list=anyofroles[sysadmin,admin]
+                            /admin/update=roles[sysadmin]
+                            /admin/validateJobNumber=anyofroles[sysadmin,admin]
+                            /admin/validateName=anyofroles[sysadmin,admin]
+                            /admin/getData=anyofroles[sysadmin,admin]
+                            /admin//updatePhone=roles[sysadmin]
+
+                            /department/index=roles[sysadmin]
+                            /department/add=roles[sysadmin]
+                            /department/search=roles[sysadmin]
+                            /department/edit=roles[sysadmin]
+                            /department/delete=roles[sysadmin]
+                            /department/list=anyofroles[sysadmin,admin]
+                            /department/validateName=roles[sysadmin]
+                            /department/validateNumber=roles[sysadmin]
+
+                            /profession/index=roles[sysadmin]
+                            /profession/search=roles[sysadmin]
+                            /profession/add=roles[sysadmin]
+                            /profession/edit=roles[sysadmin]
+                            /profession/delete=roles[sysadmin]
+                            /profession/validateName=roles[sysadmin]
+                            /profession/validateNumber=roles[sysadmin]
+                            /profession/list=anyofroles[sysadmin,admin]
+
+                            /student/**=roles[sysadmin]
+
+
+                            /building/index=roles[sysadmin]
+                            /building/search=roles[sysadmin]
+                            /building/add=roles[sysadmin]
+                            /building/list=anyofroles[sysadmin,admin]
+                            /building/update=roles[sysadmin]
+                            /building/delete=roles[sysadmin]
+                            /building/validator=roles[sysadmin]
+
+                            /dormitory/index=roles[sysadmin]
+                            /dormitory/statistics=roles[sysadmin]
+                            /dormitory/search=roles[sysadmin]
+                            /dormitory/update=roles[sysadmin]
+                            /dormitory/student=anyofroles[sysadmin,admin]
+                            /dormitory/add=roles[sysadmin]
+                            /dormitory/get=anyofroles[sysadmin,admin]
+                            /dormitory/validatorNumber=roles[sysadmin]
+                            /dormitory/listFloor=anyofroles[sysadmin,admin]
+                            /dormitory/statistics/search=roles[sysadmin]
+                            /dormitory/index=roles[sysadmin]
+                            /dormitory/list=anyofroles[sysadmin,admin]
+
+
+                            /log/**=anyofroles[sysadmin,admin]
+
+
+                            /electricRecord/**=roles[admin]
+                            /goodsRecord/**=roles[admin]
+
+                            /sanitation/**=roles[admin]
+
+                            /visitRecord/**=roles[admin]
+                            /waterRecord/**=roles[admin]
+                            /repairsRecord/search=roles[admin]
+                            /sendWaterRecord/search=roles[admin]
+                            /user/**=roles[student]
+
+                            /publicNote/first=authc
+                            /publicNote/search=authc
+                            /publicNote/index=roles[sysadmin]
+                            /publicNote/add=roles[sysadmin]
+                            /publicNote/delete=roles[sysadmin]
+                            /publicNote/edit=roles[sysadmin]
+
+                            /repairsRecord/**=authc
+                            /sendWaterRecord/**=authc
+
+                            /repairsRecord/user/**=roles[student]
+                            /repairsRecord/user/**=roles[student]
+
+
+                     </value>
+              </property>
+       </bean>
+
+       <!-- Realm实现 -->
+       <bean id="adminRealm" class="sdms.controller.shiro.AdminRealm"/>
+
+       <bean id="anyofroles" class="sdms.controller.shiro.AnyOfRolesAuthorizationFilter"/>
+
+       <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+              <!-- 使用下面配置的缓存管理器 -->
+              <property name="realm" ref="adminRealm"/>
+
+              <!-- 使用下面配置的缓存管理器 -->
+              <property name="cacheManager" ref="cacheManager"/>
+       </bean>
+
+
+       <!-- 缓存管理器 -->
+       <bean id="cacheManager" class="org.apache.shiro.cache.MemoryConstrainedCacheManager"/>
+
+       <!-- Shiro生命周期处理器 -->
+       <bean id="fifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+
+
+       <!-- aop 权限拦截 -->
+       <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+              <property name="securityManager" ref="securityManager"/>
+       </bean>
+</beans>
